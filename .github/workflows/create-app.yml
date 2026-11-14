@@ -15,11 +15,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Configure Gradle to use Java 17
+        run: |
+          JAVA_HOME_17=$(dirname $(dirname $(readlink -f $(which java))))
+          echo "org.gradle.java.home=$JAVA_HOME_17" >> frontend/android/gradle.properties
+          echo "Gradle will use: $JAVA_HOME_17"
 
       - name: Download apk-signer tool
         run: sudo apt-get update -y && sudo apt-get install -y apksigner
-      
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -47,7 +59,7 @@ jobs:
         if: inputs.sign == true
         run: apksigner verify --print-certs --verbose build/app/outputs/flutter-apk/app-release.apk
         working-directory: ./frontend
-      
+
       - name: Save apk File
         uses: actions/upload-artifact@v4
         with:
