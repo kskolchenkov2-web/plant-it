@@ -1,4 +1,4 @@
-import 'package:dynamic_color/dynamic_color.dart';
+ 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:plant_it/config/dependencies.dart';
